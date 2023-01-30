@@ -9,16 +9,18 @@
 
 using namespace std;
 
+vector<char> wynik_DNA;
 vector<int> wymieszane_wierzcholki;
 vector<pair<int,int>> ulozone_wierzcholki;
+vector<int> nie_pasuje_bo_uzyty;
 
 int main() {
     //PARAMETRY
     char zasady_azotowe[4] = {'A', 'T', 'C', 'G'};
     int dlugosc_DNA = 40;
     int dlugosc_okienka = 4;
-    float procent_pozytywnych = 10.0;
-    float procent_negatywnych = 10.0;
+    float procent_pozytywnych = 0;
+    float procent_negatywnych = 0;
 
     //GENEROWANIE LANCUCHA DNA
     vector<char> lancuch_DNA;
@@ -90,9 +92,6 @@ int main() {
     // dodanie kopii wektora okienka
     okienka_kopia = okienka;
 
-    //ROZWIAZANIE LOSOWE - bez wag
-    vector<char> wynik_DNA;
-
     //Startowy wierzcholek (dla rozwiazanie z wagami korzystamy z tego samego kawalka kodu)
     for (auto it = okienka[0].begin(); it != okienka[0].end(); it++) {
         wynik_DNA.push_back(*it);
@@ -104,23 +103,6 @@ int main() {
     int pomoc = 0; // mozna pomyslec nad lepsza nazwa
     int pomoc2 = liczba_okienek; // mozna pomyslec nad lepsza nazwa
 
-/*    for (int i = 0; i < pomoc2; i++)
-    {
-        rand_index = rand() % + (liczba_okienek);
-
-        for (auto it = okienka[rand_index].begin(); it != okienka[rand_index].end(); it++)
-        {
-            if (pomoc == dlugosc_okienka - 1)
-            {
-                wynik_DNA.push_back(*it);
-            }
-            pomoc++;
-        }
-        pomoc = 0;
-        okienka.erase(okienka.begin() + rand_index); // zrobic duplikat dla kopii tej zmiennej
-        liczba_okienek--;
-    }
-    */
 
     // rozwiazanie z wagami
     // oznaczenie wag kolejnych wierzcholkow dla rozwazanego w danym momencie wierzcholka
@@ -149,7 +131,7 @@ int main() {
 
         for (int i = 0; i < liczba_okienek; i++) {
             if (i == id_obecnego_wierzcholka)
-                waga_wierzcholkow.push_back(-1); // -1 oznacza, ze to ten sam wierzcholek
+                waga_wierzcholkow.push_back(0);
             else {
                 //cout << "i: " << i << endl;
                 for (int j = 0; j < dlugosc_okienka; j++) {
@@ -180,10 +162,8 @@ int main() {
                             for (int j = 0; j < dlugosc_okienka; j++) {
                                 cout << *(ite + j);
                             }
-                            cout << " id_wierzcholka: "
-                                 << id_wierzcholka << " waga wierzcholka: " << waga_wierzcholkow[i] << endl;
+                            cout << " waga wierzcholka: " << waga_wierzcholkow[i] << endl;
                             licznik_ite = 0;
-                            id_wierzcholka++;
                             break;
                         }
                     }
@@ -200,12 +180,12 @@ int main() {
         int index2;
 
         for (auto &n: waga_wierzcholkow) {
-            if (n != -1 && n != 0 && n < min_waga) {
+            if (n != 0 && n < min_waga) {
                 min_waga = n;
             }
         }
 
-            for (auto &el: waga_wierzcholkow) {      
+            for (auto &el: waga_wierzcholkow) {
                 if (el == min_waga) {
                     wymieszane_wierzcholki = waga_wierzcholkow;
                     int id = 0;
@@ -213,28 +193,51 @@ int main() {
                         ulozone_wierzcholki.emplace_back(make_pair(n, id));
                         id++;
                     }
-                    random_shuffle(ulozone_wierzcholki.begin(), ulozone_wierzcholki.end());
+                    //random_shuffle(ulozone_wierzcholki.begin(), ulozone_wierzcholki.end());
                     for (auto& n : ulozone_wierzcholki) {
                         if (n.first == el) {
                             index2 = n.second;
+                            ulozone_wierzcholki.clear();
+                            id = 0;
+                            for (auto& m : wymieszane_wierzcholki) {
+                                ulozone_wierzcholki.emplace_back(make_pair(m, id));
+                                id++;
+                            }
                             break;
                         }
                     }
-                    zuzyte_wierzcholki_id.push_back(index2);
-                    id_obecnego_wierzcholka = index2;
-                    cout << "id obecnego wierzcholka: " << id_obecnego_wierzcholka << endl;
-                    okienka_temp = okienka[index2];
-                    waga_wierzcholkow.clear();
-                    break;
+                    if (find(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), index2) != zuzyte_wierzcholki_id.end()) {
+                        nie_pasuje_bo_uzyty.push_back(index2);
+                        continue;
+                    }
+                    else {
+                        zuzyte_wierzcholki_id.push_back(index2);
+                        for (auto& t : ulozone_wierzcholki) {
+                            if (t.second == index2) {
+                                int waga_minus = 0;
+                                for (auto& y : okienka[index2]) {
+                                    if (t.first > waga_minus) {
+                                        waga_minus++;
+                                    }
+                                    else {
+                                        for (auto it = okienka[index2].begin() - waga_minus + dlugosc_okienka; it != okienka[index2].end(); it++) {
+                                            wynik_DNA.push_back(*it);
+                                            cout << "Dodano do rozwiazania: " << *it << endl;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        id_obecnego_wierzcholka = index2;
+                        cout << "id obecnego wierzcholka: " << id_obecnego_wierzcholka << endl;
+                        okienka_temp = okienka[index2];
+                        waga_wierzcholkow.clear();
+                        break;
+                    }
                 }
+                zuzyte_wierzcholki_id.push_back(index2);
             }
-            for (int y = dlugosc_okienka - min_waga; y <= dlugosc_okienka; y++) {
-                wynik_DNA.push_back(okienka_temp[y]);
-                id_obecnego_wierzcholka = index2;
-                licznik_zasad++;
-                //cout << "okienka_temp[y]: " << okienka_temp[y] << ' ';
-            }
-            zuzyte_wierzcholki_id.push_back(index2);
         }
 
 
