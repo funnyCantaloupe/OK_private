@@ -1,0 +1,339 @@
+C:\Users\Administrator\CLionProjects\algorytm_mrowkowy\cmake-build-debug\algorytm_mrowkowy.exe
+Wygenerowany lancuch:
+C A G A A T T A C A G A G A C T A G A T
+Okienko nr: 0 | CAGA
+Okienko nr: 1 | AGAA
+Okienko nr: 2 | GAAT
+Okienko nr: 3 | AATT
+Okienko nr: 4 | ATTA
+Okienko nr: 5 | TTAC
+Okienko nr: 6 | TACA
+Okienko nr: 7 | ACAG
+Okienko nr: 8 | CAGA
+Okienko nr: 9 | AGAG
+Okienko nr: 10 | GAGA
+Okienko nr: 11 | AGAC
+Okienko nr: 12 | GACT
+Okienko nr: 13 | ACTA
+Okienko nr: 14 | CTAG
+Okienko nr: 15 | TAGA
+Okienko nr: 16 | AGAT
+Lancuch z bledami:
+C A G A A T T A C A G A G A C T A G
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 4
+TAGA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: AGAA waga wierzcholka: 1
+wierzcholek: GAAT waga wierzcholka: 2
+wierzcholek: AATT waga wierzcholka: 3
+wierzcholek: ATTA waga wierzcholka: 3
+wierzcholek: TTAC waga wierzcholka: 0
+wierzcholek: TACA waga wierzcholka: 0
+wierzcholek: ACAG waga wierzcholka: 3
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 2
+wierzcholek: AGAC waga wierzcholka: 1
+wierzcholek: GACT waga wierzcholka: 2
+wierzcholek: ACTA waga wierzcholka: 3
+Dodano do rozwiazania: A
+suma odleglosci: 4
+id obecnego wierzcholka: 2
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 5
+AGAA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: GAAT waga wierzcholka: 1
+wierzcholek: AATT waga wierzcholka: 2
+wierzcholek: ATTA waga wierzcholka: 3
+wierzcholek: TTAC waga wierzcholka: 0
+wierzcholek: TACA waga wierzcholka: 0
+wierzcholek: ACAG waga wierzcholka: 3
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 3
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 3
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 5
+AGAA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: GAAT waga wierzcholka: 1
+wierzcholek: AATT waga wierzcholka: 2
+wierzcholek: ATTA waga wierzcholka: 3
+wierzcholek: TTAC waga wierzcholka: 0
+wierzcholek: TACA waga wierzcholka: 0
+wierzcholek: ACAG waga wierzcholka: 3
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 3
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 3
+Dodano do rozwiazania: T
+suma odleglosci: 5
+id obecnego wierzcholka: 3
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 6
+GAAT
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: AATT waga wierzcholka: 1
+wierzcholek: ATTA waga wierzcholka: 2
+wierzcholek: TTAC waga wierzcholka: 3
+wierzcholek: TACA waga wierzcholka: 3
+wierzcholek: ACAG waga wierzcholka: 0
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 0
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 0
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 6
+GAAT
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: AATT waga wierzcholka: 1
+wierzcholek: ATTA waga wierzcholka: 2
+wierzcholek: TTAC waga wierzcholka: 3
+wierzcholek: TACA waga wierzcholka: 3
+wierzcholek: ACAG waga wierzcholka: 0
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 0
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 0
+Dodano do rozwiazania: T
+suma odleglosci: 6
+id obecnego wierzcholka: 4
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 7
+AATT
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: ATTA waga wierzcholka: 1
+wierzcholek: TTAC waga wierzcholka: 2
+wierzcholek: TACA waga wierzcholka: 3
+wierzcholek: ACAG waga wierzcholka: 0
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 0
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 0
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 7
+AATT
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: ATTA waga wierzcholka: 1
+wierzcholek: TTAC waga wierzcholka: 2
+wierzcholek: TACA waga wierzcholka: 3
+wierzcholek: ACAG waga wierzcholka: 0
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 0
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 0
+Dodano do rozwiazania: A
+suma odleglosci: 7
+id obecnego wierzcholka: 5
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 8
+ATTA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: TTAC waga wierzcholka: 1
+wierzcholek: TACA waga wierzcholka: 2
+wierzcholek: ACAG waga wierzcholka: 3
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 3
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 3
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 8
+ATTA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: TTAC waga wierzcholka: 1
+wierzcholek: TACA waga wierzcholka: 2
+wierzcholek: ACAG waga wierzcholka: 3
+wierzcholek: CAGA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 3
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 3
+Dodano do rozwiazania: C
+suma odleglosci: 8
+id obecnego wierzcholka: 6
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 9
+TTAC
+wierzcholek: CATA waga wierzcholka: 3
+wierzcholek: TACA waga wierzcholka: 1
+wierzcholek: ACAG waga wierzcholka: 2
+wierzcholek: CAGA waga wierzcholka: 3
+wierzcholek: CTAG waga wierzcholka: 3
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 0
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 2
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 9
+TTAC
+wierzcholek: CATA waga wierzcholka: 3
+wierzcholek: TACA waga wierzcholka: 1
+wierzcholek: ACAG waga wierzcholka: 2
+wierzcholek: CAGA waga wierzcholka: 3
+wierzcholek: CTAG waga wierzcholka: 3
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 0
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 2
+Dodano do rozwiazania: A
+suma odleglosci: 9
+id obecnego wierzcholka: 7
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 10
+TACA
+wierzcholek: CATA waga wierzcholka: 2
+wierzcholek: ACAG waga wierzcholka: 1
+wierzcholek: CAGA waga wierzcholka: 2
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 3
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 3
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 10
+TACA
+wierzcholek: CATA waga wierzcholka: 2
+wierzcholek: ACAG waga wierzcholka: 1
+wierzcholek: CAGA waga wierzcholka: 2
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: AGAC waga wierzcholka: 3
+wierzcholek: GACT waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 3
+Dodano do rozwiazania: G
+suma odleglosci: 10
+id obecnego wierzcholka: 8
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 11
+ACAG
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: CAGA waga wierzcholka: 1
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 3
+wierzcholek: AGAC waga wierzcholka: 2
+wierzcholek: GACT waga wierzcholka: 3
+wierzcholek: ACTA waga wierzcholka: 0
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 11
+ACAG
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: CAGA waga wierzcholka: 1
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 3
+wierzcholek: AGAC waga wierzcholka: 2
+wierzcholek: GACT waga wierzcholka: 3
+wierzcholek: ACTA waga wierzcholka: 0
+Dodano do rozwiazania: A
+suma odleglosci: 11
+id obecnego wierzcholka: 9
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 12
+CAGA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 2
+wierzcholek: AGAC waga wierzcholka: 1
+wierzcholek: GACT waga wierzcholka: 2
+wierzcholek: ACTA waga wierzcholka: 3
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 12
+CAGA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 2
+wierzcholek: AGAC waga wierzcholka: 1
+wierzcholek: GACT waga wierzcholka: 2
+wierzcholek: ACTA waga wierzcholka: 3
+Dodano do rozwiazania: C
+suma odleglosci: 12
+id obecnego wierzcholka: 12
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 13
+AGAC
+wierzcholek: CATA waga wierzcholka: 3
+wierzcholek: CTAG waga wierzcholka: 3
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: GACT waga wierzcholka: 1
+wierzcholek: ACTA waga wierzcholka: 2
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 13
+AGAC
+wierzcholek: CATA waga wierzcholka: 3
+wierzcholek: CTAG waga wierzcholka: 3
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: GACT waga wierzcholka: 1
+wierzcholek: ACTA waga wierzcholka: 2
+Dodano do rozwiazania: T
+suma odleglosci: 13
+id obecnego wierzcholka: 13
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 14
+GACT
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 2
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 1
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 14
+GACT
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 2
+wierzcholek: GAGA waga wierzcholka: 0
+wierzcholek: ACTA waga wierzcholka: 1
+Dodano do rozwiazania: A
+suma odleglosci: 14
+id obecnego wierzcholka: 14
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 15
+ACTA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 1
+wierzcholek: GAGA waga wierzcholka: 0
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 15
+ACTA
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: CTAG waga wierzcholka: 1
+wierzcholek: GAGA waga wierzcholka: 0
+Dodano do rozwiazania: G
+suma odleglosci: 15
+id obecnego wierzcholka: 10
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 16
+CTAG
+wierzcholek: CATA waga wierzcholka: 0
+wierzcholek: GAGA waga wierzcholka: 3
+Dodano do rozwiazania: A
+Dodano do rozwiazania: G
+Dodano do rozwiazania: A
+suma odleglosci: 18
+id obecnego wierzcholka: 11
+
+AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): 19
+GAGA
+wierzcholek: CATA waga wierzcholka: 0
+mrowka nie dotarla
+
+
+Rozwiazanie:
+T A G A A T T A C A G A C T A G A G
+
+suma_odleglosci: 18
+
+Process finished with exit code 0
