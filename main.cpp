@@ -13,14 +13,25 @@ vector<char> wynik_DNA;
 vector<int> wymieszane_wierzcholki;
 vector<pair<int,int>> ulozone_wierzcholki;
 vector<int> nie_pasuje_bo_uzyty;
+vector<int> zuzyte_wierzcholki_id;
+
+struct Mrowka {
+    std::vector<int> sciezka;
+    float feromony;
+};
+
+vector<Mrowka> mrowki;
 
 int main() {
     //PARAMETRY
     char zasady_azotowe[4] = {'A', 'T', 'C', 'G'};
-    int dlugosc_DNA = 40;
-    int dlugosc_okienka = 4;
-    float procent_pozytywnych = 0;
-    float procent_negatywnych = 0;
+    int dlugosc_DNA = 50;
+    dlugosc_DNA = dlugosc_DNA + 1;
+    int dlugosc_okienka = 6;
+    float procent_pozytywnych = 10;
+    float procent_negatywnych = 10;
+
+    bool dodano = false;
 
     //GENEROWANIE LANCUCHA DNA
     vector<char> lancuch_DNA;
@@ -51,22 +62,14 @@ int main() {
         okienka_temp.clear();
     }
 
-    //Wyswietlanie okienek
-    cout << endl;
-    for (int i = 0; i < liczba_okienek; i++) {
-        cout << "Okienko nr: " << i << " | ";
-        for (auto it = okienka[i].begin(); it != okienka[i].end(); it++) {
-            cout << *it;
-        }
 
-        cout << endl;
-    }
 
     //GENEROWANIE BLEDOW NEGATYWNYCH - USUWANIE NUKLEOTYDOW
     float liczba_bledow_negatywnych = round(liczba_okienek * (procent_negatywnych / 100));
     for (int i = 0; i < liczba_bledow_negatywnych; i++) {
-        rand_index = rand() % +(liczba_okienek - 1);
-        okienka.erase(okienka.begin() + rand_index);
+        rand_index = rand() % +(liczba_okienek);
+        std::swap(okienka[rand_index], okienka[liczba_okienek - 1]);
+        okienka.pop_back();
         liczba_okienek--;
     }
     dlugosc_DNA = dlugosc_DNA - liczba_bledow_negatywnych;
@@ -88,14 +91,28 @@ int main() {
     }
     dlugosc_DNA = dlugosc_DNA + liczba_bledow_pozytywnych;
 
+    cout << "dlugosc DNA wynosi " << dlugosc_DNA << endl;
+
+    //Wyswietlanie okienek
+    cout << endl;
+    for (int i = 0; i < liczba_okienek; i++) {
+        cout << "Okienko nr: " << i << " | ";
+        for (auto it = okienka[i].begin(); it != okienka[i].end(); it++) {
+            cout << *it;
+        }
+
+        cout << endl;
+    }
+
 
     // dodanie kopii wektora okienka
     okienka_kopia = okienka;
 
-    //Startowy wierzcholek (dla rozwiazanie z wagami korzystamy z tego samego kawalka kodu)
+    //Startowy wierzcholek
     for (auto it = okienka[0].begin(); it != okienka[0].end(); it++) {
         wynik_DNA.push_back(*it);
     }
+    zuzyte_wierzcholki_id.push_back(0);
     okienka = okienka_kopia;
 
 
@@ -110,20 +127,38 @@ int main() {
     int id_obecnego_wierzcholka = 0; // zeby moc porownac do tego wierzcholka w ponizeszej petli (j)
 
     vector<int> waga_wierzcholkow;
-    vector<int> zuzyte_wierzcholki_id;
     vector<int> uzyte_losowe;
+    int suma_odleglosci = 3; // bo 1 miedzy wszystkimi polaczeniami 1. okienka; wg tego liczymy trafnosc obranej drogi
+    int temp_dlugosc;
 
     pomoc2 = liczba_okienek;
     waga_wierzcholkow.clear();
     int licznik_ite;
     int id_wierzcholka = 0;
     int licznik_zasad = 0;
+    bool nie_zero = false;
+    int nadmiar;
+    bool czy_cofnieto = false;
+    bool czy_mrowka_dotarla;
+    int liczba_dodanych_okienek = 0;
+    int realna_dlugosc_DNA = 4;
+    int suma_nadlozonej_drogi = 0;
 
-    while (wynik_DNA.size() != dlugosc_DNA) {
+    struct Mrowka mrowka;
+    mrowka.sciezka.push_back(0);
 
+    while (realna_dlugosc_DNA < dlugosc_DNA) {
+
+        czy_mrowka_dotarla = true;
         cout << endl;
         okienka_temp = okienka[id_obecnego_wierzcholka];
-        cout << "AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): ";
+        cout << "AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): " << wynik_DNA.size() << " " << endl;
+        if (wynik_DNA.size() >= dlugosc_DNA) {
+            nadmiar = wynik_DNA.size() - dlugosc_DNA;
+            wynik_DNA.erase(wynik_DNA.end() - nadmiar, wynik_DNA.end());
+        }
+
+
         for (auto& n : okienka_temp) {
             cout << n;
         }
@@ -152,22 +187,26 @@ int main() {
             licznik_ite = 0;
             okienka_temp = okienka[i];
 
-                for (auto ite = okienka_temp.begin(); ite != okienka_temp.end(); ite++) {
-                    if (count(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), i) == 0) {
-                        if (licznik_ite != dlugosc_okienka - 1) {
-                            ite--;
-                            licznik_ite++;
-                        } else {
-                            cout << "wierzcholek: ";
-                            for (int j = 0; j < dlugosc_okienka; j++) {
-                                cout << *(ite + j);
-                            }
-                            cout << " waga wierzcholka: " << waga_wierzcholkow[i] << endl;
-                            licznik_ite = 0;
-                            break;
+
+            for (auto ite = okienka_temp.begin(); ite != okienka_temp.end(); ite++) {
+                if (count(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), i) == 0) {
+                    if (licznik_ite != dlugosc_okienka - 1) {
+                        ite--;
+                        licznik_ite++;
+                    } else {
+                        cout << "wierzcholek: ";
+                        for (int j = 0; j < dlugosc_okienka; j++) {
+                            cout << *(ite + j);
                         }
+                        cout << " waga wierzcholka: " << waga_wierzcholkow[i] << endl;
+                        if (waga_wierzcholkow[i] != 0) {
+
+                        }
+                        licznik_ite = 0;
+                        break;
                     }
                 }
+            }
 
             okienka_temp = okienka[i];
         }
@@ -178,68 +217,92 @@ int main() {
 
         int min_waga = dlugosc_okienka; // niedopasowanie!
         int index2;
+        nie_zero = false;
 
         for (auto &n: waga_wierzcholkow) {
             if (n != 0 && n < min_waga) {
                 min_waga = n;
+                nie_zero = true;
             }
         }
 
-            for (auto &el: waga_wierzcholkow) {
-                if (el == min_waga) {
-                    wymieszane_wierzcholki = waga_wierzcholkow;
-                    int id = 0;
-                    for (auto& n : wymieszane_wierzcholki) {
-                        ulozone_wierzcholki.emplace_back(make_pair(n, id));
-                        id++;
-                    }
-                    //random_shuffle(ulozone_wierzcholki.begin(), ulozone_wierzcholki.end());
-                    for (auto& n : ulozone_wierzcholki) {
-                        if (n.first == el) {
-                            index2 = n.second;
-                            ulozone_wierzcholki.clear();
-                            id = 0;
-                            for (auto& m : wymieszane_wierzcholki) {
-                                ulozone_wierzcholki.emplace_back(make_pair(m, id));
-                                id++;
-                            }
-                            break;
+        for (auto &el: waga_wierzcholkow) {
+
+            if (el >= min_waga) {
+                wymieszane_wierzcholki = waga_wierzcholkow;
+                int id = 0;
+                for (auto& n : wymieszane_wierzcholki) {
+                    ulozone_wierzcholki.emplace_back(make_pair(n, id));
+                    id++;
+                }
+
+                for (auto& n : ulozone_wierzcholki) {
+                    if (n.first >= el) {
+                        index2 = n.second;
+                        ulozone_wierzcholki.clear();
+                        id = 0;
+                        for (auto& m : wymieszane_wierzcholki) {
+                            ulozone_wierzcholki.emplace_back(make_pair(m, id));
+                            id++;
                         }
-                    }
-                    if (find(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), index2) != zuzyte_wierzcholki_id.end()) {
-                        nie_pasuje_bo_uzyty.push_back(index2);
-                        continue;
-                    }
-                    else {
-                        zuzyte_wierzcholki_id.push_back(index2);
-                        for (auto& t : ulozone_wierzcholki) {
-                            if (t.second == index2) {
-                                int waga_minus = 0;
-                                for (auto& y : okienka[index2]) {
-                                    if (t.first > waga_minus) {
-                                        waga_minus++;
-                                    }
-                                    else {
-                                        for (auto it = okienka[index2].begin() - waga_minus + dlugosc_okienka; it != okienka[index2].end(); it++) {
-                                            wynik_DNA.push_back(*it);
-                                            cout << "Dodano do rozwiazania: " << *it << endl;
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        id_obecnego_wierzcholka = index2;
-                        cout << "id obecnego wierzcholka: " << id_obecnego_wierzcholka << endl;
-                        okienka_temp = okienka[index2];
-                        waga_wierzcholkow.clear();
                         break;
                     }
                 }
-                zuzyte_wierzcholki_id.push_back(index2);
+                if (find(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), index2) != zuzyte_wierzcholki_id.end()) {
+                    nie_pasuje_bo_uzyty.push_back(index2);
+                    continue;
+                }
+                else {
+                    zuzyte_wierzcholki_id.push_back(index2);
+                    for (auto& t : ulozone_wierzcholki) {
+                        if (t.second == index2) {
+                            int waga_minus = 0;
+                            for (auto& y : okienka[index2]) {
+                                if (t.first > waga_minus) {
+                                    waga_minus++;
+                                }
+                                else {
+                                    for (auto it = okienka[index2].begin() - waga_minus + dlugosc_okienka; it != okienka[index2].end(); it++) {
+                                        wynik_DNA.push_back(*it);
+                                        realna_dlugosc_DNA = realna_dlugosc_DNA + 1;
+                                        cout << "realna dlugosc DNA: " << realna_dlugosc_DNA << endl;
+                                        cout << "Dodano do rozwiazania: " << *it << endl;
+                                        temp_dlugosc = waga_minus;
+                                        dodano = true;
+                                    }
+                                    if (waga_minus != 0) {
+                                        suma_odleglosci = suma_odleglosci + waga_minus + (waga_minus - 1);
+                                        suma_nadlozonej_drogi = suma_odleglosci + waga_minus - 1;
+                                    }
+                                    cout << "waga_minus: " << waga_minus << endl;
+                                    cout << "suma odleglosci: " << suma_odleglosci << endl;
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
+                    id_obecnego_wierzcholka = index2;
+                    cout << "id obecnego wierzcholka: " << id_obecnego_wierzcholka << endl;
+                    okienka_temp = okienka[index2];
+                    waga_wierzcholkow.clear();
+                    break;
+                }
             }
+            zuzyte_wierzcholki_id.push_back(index2);
         }
 
+        if (!nie_zero) {
+            czy_mrowka_dotarla = false;
+            cout << "mrowka nie dotarla" << endl;
+            break;
+        }
+        mrowka.sciezka.push_back(index2);
+    }
+
+    mrowki.push_back(mrowka);
+    mrowka.sciezka.clear();
+    mrowka.feromony = 0.0;
 
 
     //wypisanie wyniku
@@ -261,8 +324,18 @@ int main() {
     float poprawne_zasady_float = float (liczba_poprawnych_zasad);
     float dlugosc_DNA_float = float (dlugosc_DNA);
     float poprawnosc_rozwiazania = (poprawne_zasady_float/dlugosc_DNA_float) * 100;
-    cout << "Poprawnosc rozwiazania: " << poprawnosc_rozwiazania << endl;
+    int dlugosc_trasy = 0;
+//    cout << "Poprawnosc rozwiazania: " << poprawnosc_rozwiazania << endl;
+    cout << "suma_odleglosci: " << suma_odleglosci << endl;
+ //   cout << "suma nadlozonej drogi: " << suma_nadlozonej_drogi << endl;
+    for (const auto& mrowka : mrowki) {
+        std::cout << "Sciezka: ";
+        for (int n : mrowka.sciezka) {
+            std::cout << n << " ";
+        }
+        std::cout << "| Feromony: " << mrowka.feromony << std::endl;
+    }
 
     return 0;
 }
-    //END (main)
+//END (main)
