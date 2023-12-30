@@ -6,6 +6,7 @@
 #include <math.h>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -23,26 +24,57 @@ struct Mrowka {
 vector<Mrowka> mrowki;
 
 int main() {
+    bool czy_generowac = false; // jesli chcemy wygenerowac nowy lancuch
     //PARAMETRY
     char zasady_azotowe[4] = {'A', 'T', 'C', 'G'};
-    int dlugosc_DNA = 50;
+    float dlugosc_DNA = 80;
     dlugosc_DNA = dlugosc_DNA + 1;
-    int dlugosc_okienka = 6;
+    float dlugosc_okienka = 5;
     float procent_pozytywnych = 10;
     float procent_negatywnych = 10;
+    float wspolczynnik_wyparowywania = 0.1;
+    int liczba_iteracji = 2;
 
     bool dodano = false;
 
-    //GENEROWANIE LANCUCHA DNA
     vector<char> lancuch_DNA;
-    int rand_index;
-    srand(time(NULL));
-    cout << "Wygenerowany lancuch: " << endl;
-    for (int i = 0; i < dlugosc_DNA; i++) {
-        rand_index = rand() % +4;
-        lancuch_DNA.push_back(zasady_azotowe[rand_index]);
-        cout << lancuch_DNA[i] << " ";
+    int rand_index = rand() % +4;
+
+    if (czy_generowac == true) {
+
+        ofstream plik("wygenerowany_lancuch.txt");
+
+        if (!plik.is_open()) {
+            cerr << "Nie można otworzyć pliku do zapisu." << endl;
+            return 1;
+        }
+        //GENEROWANIE LANCUCHA DNA
+
+        srand(time(NULL));
+        cout << "Wygenerowany lancuch: " << endl;
+        for (int i = 0; i < dlugosc_DNA; i++) {
+            rand_index = rand() % +4;
+            lancuch_DNA.push_back(zasady_azotowe[rand_index]);
+            cout << lancuch_DNA[i] << " ";
+            plik << lancuch_DNA[i];
+        }
+
+        plik.close();
+
+        cout << endl;
+    } else {
+        ifstream plik("wygenerowany_lancuch.txt");
+
+        char znak;
+        while (plik >> znak) {
+            lancuch_DNA.push_back(znak);
+        }
+
+        // Zamknij plik
+        plik.close();
     }
+
+
 
     //GENEROWANIE OKIENEK
     vector<vector<char>> okienka;
@@ -82,7 +114,7 @@ int main() {
         for (int j = 0; j < dlugosc_okienka; j++) //generowanie losowego okienka
         {
             rand_index = rand() % +4;
-            rand2_index = rand() % + (liczba_okienek - 1);
+            rand2_index = rand() % +(liczba_okienek - 1);
             okienka_temp.push_back(zasady_azotowe[rand_index]);
         }
         okienka.insert(okienka.begin() + rand2_index, okienka_temp);
@@ -128,7 +160,7 @@ int main() {
 
     vector<int> waga_wierzcholkow;
     vector<int> uzyte_losowe;
-    int suma_odleglosci = 3; // bo 1 miedzy wszystkimi polaczeniami 1. okienka; wg tego liczymy trafnosc obranej drogi
+    float suma_odleglosci = 3; // bo 1 miedzy wszystkimi polaczeniami 1. okienka; wg tego liczymy trafnosc obranej drogi
     int temp_dlugosc;
 
     pomoc2 = liczba_okienek;
@@ -143,9 +175,17 @@ int main() {
     int liczba_dodanych_okienek = 0;
     int realna_dlugosc_DNA = 4;
     int suma_nadlozonej_drogi = 0;
+    float max_suma_odleglosci = (dlugosc_DNA - 1) * (dlugosc_okienka - 1);
 
     struct Mrowka mrowka;
-    mrowka.sciezka.push_back(0);
+
+    int iteracja = 0;
+
+    while (iteracja < liczba_iteracji) {
+
+        if (iteracja != 0) {
+            struct Mrowka mrowka;
+        }
 
     while (realna_dlugosc_DNA < dlugosc_DNA) {
 
@@ -159,7 +199,7 @@ int main() {
         }
 
 
-        for (auto& n : okienka_temp) {
+        for (auto &n: okienka_temp) {
             cout << n;
         }
         cout << endl;
@@ -171,11 +211,12 @@ int main() {
                 //cout << "i: " << i << endl;
                 for (int j = 0; j < dlugosc_okienka; j++) {
                     if (equal(okienka[id_obecnego_wierzcholka].begin() + j,
-                              okienka[id_obecnego_wierzcholka].end(), okienka[i].begin(), okienka[i].end() - j) && count(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), i) == 0) {
+                              okienka[id_obecnego_wierzcholka].end(), okienka[i].begin(), okienka[i].end() - j) &&
+                        count(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), i) == 0) {
                         waga_wierzcholkow.push_back(j);
                         break;
-                    }
-                    else if (j == dlugosc_okienka - 1 || count(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), i) != 0) {
+                    } else if (j == dlugosc_okienka - 1 ||
+                               count(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), i) != 0) {
                         waga_wierzcholkow.push_back(0);
                         break;
                     }
@@ -231,38 +272,38 @@ int main() {
             if (el >= min_waga) {
                 wymieszane_wierzcholki = waga_wierzcholkow;
                 int id = 0;
-                for (auto& n : wymieszane_wierzcholki) {
+                for (auto &n: wymieszane_wierzcholki) {
                     ulozone_wierzcholki.emplace_back(make_pair(n, id));
                     id++;
                 }
 
-                for (auto& n : ulozone_wierzcholki) {
+                for (auto &n: ulozone_wierzcholki) {
                     if (n.first >= el) {
                         index2 = n.second;
                         ulozone_wierzcholki.clear();
                         id = 0;
-                        for (auto& m : wymieszane_wierzcholki) {
+                        for (auto &m: wymieszane_wierzcholki) {
                             ulozone_wierzcholki.emplace_back(make_pair(m, id));
                             id++;
                         }
                         break;
                     }
                 }
-                if (find(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), index2) != zuzyte_wierzcholki_id.end()) {
+                if (find(zuzyte_wierzcholki_id.begin(), zuzyte_wierzcholki_id.end(), index2) !=
+                    zuzyte_wierzcholki_id.end()) {
                     nie_pasuje_bo_uzyty.push_back(index2);
                     continue;
-                }
-                else {
+                } else {
                     zuzyte_wierzcholki_id.push_back(index2);
-                    for (auto& t : ulozone_wierzcholki) {
+                    for (auto &t: ulozone_wierzcholki) {
                         if (t.second == index2) {
                             int waga_minus = 0;
-                            for (auto& y : okienka[index2]) {
+                            for (auto &y: okienka[index2]) {
                                 if (t.first > waga_minus) {
                                     waga_minus++;
-                                }
-                                else {
-                                    for (auto it = okienka[index2].begin() - waga_minus + dlugosc_okienka; it != okienka[index2].end(); it++) {
+                                } else {
+                                    for (auto it = okienka[index2].begin() - waga_minus + dlugosc_okienka;
+                                         it != okienka[index2].end(); it++) {
                                         wynik_DNA.push_back(*it);
                                         realna_dlugosc_DNA = realna_dlugosc_DNA + 1;
                                         cout << "realna dlugosc DNA: " << realna_dlugosc_DNA << endl;
@@ -298,11 +339,14 @@ int main() {
             break;
         }
         mrowka.sciezka.push_back(index2);
+        mrowka.feromony = suma_odleglosci / (max_suma_odleglosci / dlugosc_okienka);
     }
-
     mrowki.push_back(mrowka);
-    mrowka.sciezka.clear();
-    mrowka.feromony = 0.0;
+    iteracja++;
+}
+
+  //  mrowka.sciezka.clear();
+  //  mrowka.feromony = 0.0;
 
 
     //wypisanie wyniku
