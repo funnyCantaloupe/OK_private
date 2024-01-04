@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include <random>
 
 using namespace std;
 
@@ -24,12 +25,12 @@ struct Mrowka {
 vector<Mrowka> mrowki;
 
 int main() {
-    bool czy_generowac = false; // jesli chcemy wygenerowac nowy lancuch
+    bool czy_generowac = true; // jesli chcemy wygenerowac nowy lancuch
     //PARAMETRY
     char zasady_azotowe[4] = {'A', 'T', 'C', 'G'};
     float dlugosc_DNA = 80;
     dlugosc_DNA = dlugosc_DNA + 1;
-    float dlugosc_okienka = 5;
+    float dlugosc_okienka = 4;
     float procent_pozytywnych = 10;
     float procent_negatywnych = 10;
     float wspolczynnik_wyparowywania = 0.1;
@@ -141,11 +142,7 @@ int main() {
     okienka_kopia = okienka;
 
     //Startowy wierzcholek
-    for (auto it = okienka[0].begin(); it != okienka[0].end(); it++) {
-        wynik_DNA.push_back(*it);
-    }
-    zuzyte_wierzcholki_id.push_back(0);
-    okienka = okienka_kopia;
+
 
 
     //Kolejne wierzcholki
@@ -175,28 +172,35 @@ int main() {
     int liczba_dodanych_okienek = 0;
     int realna_dlugosc_DNA = 4;
     int suma_nadlozonej_drogi = 0;
-    float max_suma_odleglosci = (dlugosc_DNA - 1) * (dlugosc_okienka - 1);
-
-    struct Mrowka mrowka;
+    float max_suma_odleglosci = (dlugosc_DNA - 1) * (dlugosc_okienka - 1) * (dlugosc_okienka - 1);
+    float min_suma_odleglosci = 2 * (dlugosc_DNA - 1);
 
     int iteracja = 0;
 
+
     while (iteracja < liczba_iteracji) {
 
-        if (iteracja != 0) {
-            struct Mrowka mrowka;
+        for (auto it = okienka[0].begin(); it != okienka[0].end(); it++) {
+            wynik_DNA.push_back(*it);
         }
+        zuzyte_wierzcholki_id.push_back(0);
+        okienka = okienka_kopia;
+
+        struct Mrowka mrowka;
+        mrowka.sciezka.push_back(0);
 
     while (realna_dlugosc_DNA < dlugosc_DNA) {
 
         czy_mrowka_dotarla = true;
         cout << endl;
+
         okienka_temp = okienka[id_obecnego_wierzcholka];
+
         cout << "AKTUALNY WIERZCHOLEK (WAGI LICZYMY DLA NIEGO): " << wynik_DNA.size() << " " << endl;
-        if (wynik_DNA.size() >= dlugosc_DNA) {
-            nadmiar = wynik_DNA.size() - dlugosc_DNA;
-            wynik_DNA.erase(wynik_DNA.end() - nadmiar, wynik_DNA.end());
-        }
+   //     if (wynik_DNA.size() >= dlugosc_DNA) {
+   //         nadmiar = wynik_DNA.size() - dlugosc_DNA;
+    //        wynik_DNA.erase(wynik_DNA.end() - nadmiar, wynik_DNA.end());
+   //     }
 
 
         for (auto &n: okienka_temp) {
@@ -272,10 +276,18 @@ int main() {
             if (el >= min_waga) {
                 wymieszane_wierzcholki = waga_wierzcholkow;
                 int id = 0;
-                for (auto &n: wymieszane_wierzcholki) {
-                    ulozone_wierzcholki.emplace_back(make_pair(n, id));
+                for (auto it = wymieszane_wierzcholki.begin(); it != wymieszane_wierzcholki.end(); ++it) {
+
+                        ulozone_wierzcholki.emplace_back(make_pair(*it, id));
+
                     id++;
                 }
+
+                random_device rd;
+                mt19937 g(rd());
+
+                // Wymieszaj wektor par
+                std::shuffle(ulozone_wierzcholki.begin(), ulozone_wierzcholki.end(), g);
 
                 for (auto &n: ulozone_wierzcholki) {
                     if (n.first >= el) {
@@ -312,7 +324,7 @@ int main() {
                                         dodano = true;
                                     }
                                     if (waga_minus != 0) {
-                                        suma_odleglosci = suma_odleglosci + waga_minus + (waga_minus - 1);
+                                        suma_odleglosci = suma_odleglosci + waga_minus * waga_minus;
                                         suma_nadlozonej_drogi = suma_odleglosci + waga_minus - 1;
                                     }
                                     cout << "waga_minus: " << waga_minus << endl;
@@ -339,7 +351,7 @@ int main() {
             break;
         }
         mrowka.sciezka.push_back(index2);
-        mrowka.feromony = suma_odleglosci / (max_suma_odleglosci / dlugosc_okienka);
+        mrowka.feromony = min_suma_odleglosci / suma_odleglosci;
     }
     mrowki.push_back(mrowka);
     iteracja++;
