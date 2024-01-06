@@ -33,7 +33,7 @@ int main() {
     float dlugosc_okienka = 4;
     float procent_pozytywnych = 10;
     float procent_negatywnych = 10;
-    float wspolczynnik_wyparowywania = 0.1;
+    float wspolczynnik_wyparowywania = 0.2;
     int liczba_iteracji = 5;
 
     bool dodano = false;
@@ -404,17 +404,20 @@ int main() {
                 cout << "mrowka nie dotarla" << endl;
                 realna_dlugosc_DNA = dlugosc_okienka - 1;
                 suma_odleglosci = dlugosc_okienka - 1;
-                suma_odleglosci = dlugosc_okienka - 1;
                 break;
             }
             mrowka.sciezka.push_back(index2);
             mrowka.feromony = min_suma_odleglosci / suma_odleglosci;
             czy_mrowka_dotarla = true;
         }
+        for (auto &n: mrowki) {
+            n.feromony = n.feromony - wspolczynnik_wyparowywania;
+        }
         mrowki.push_back(mrowka);
         iteracja++;
         realna_dlugosc_DNA = dlugosc_okienka - 1;
         suma_odleglosci = dlugosc_okienka - 1;
+
         cout << "iteracja: " << iteracja << endl;
     }
 
