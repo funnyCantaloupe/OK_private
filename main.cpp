@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <fstream>
 #include <random>
+#include <chrono>
 
 using namespace std;
 
@@ -192,6 +193,10 @@ int main() {
     bool czy_najlepszy = false;
     int ktora_mrowka = 0;
     int najmniejsza_odleglosc_w_iteracji = 0;
+
+    // rozpoczecie liczenia czasu
+
+    auto start_time = chrono::high_resolution_clock::now();
     
     while (iteracja < liczba_iteracji) {
 
@@ -468,9 +473,13 @@ int main() {
         cout << "iteracja: " << iteracja << endl;
     }
 
+    // koniec iteracji, zatrzymanie licznika czasu
+
+    auto end_time = chrono::high_resolution_clock::now();
+    auto elapsed_time = chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+
     //  mrowka.sciezka.clear();
     //  mrowka.feromony = 0.0;
-
 
     //wypisanie wyniku
     cout << endl << endl << "Rozwiazanie: " << endl;
@@ -504,6 +513,8 @@ int main() {
         }
         std::cout << "| Feromony: " << mrowka.feromony << std::endl;
     }
+
+    cout << "Czas wykonania: " << elapsed_time.count() << " milisekundy" << endl;
 
     return 0;
 }
