@@ -22,6 +22,7 @@ struct Mrowka {
     float feromony;
 };
 
+vector<Mrowka> mrowisko;    // tu sa przechowywane mrowki, zanim dana iteracja sie skonczy, aby pozostale mrowki w danej iteracji ich NIE braly pod uwage az do kolejnej iteracji
 vector<Mrowka> mrowki;
 
 int main() {
@@ -30,18 +31,20 @@ int main() {
     char zasady_azotowe[4] = {'A', 'T', 'C', 'G'};
     float dlugosc_DNA = 80;
     dlugosc_DNA = dlugosc_DNA + 1;
-    float dlugosc_okienka = 4;
+    float dlugosc_okienka = 6;
     float procent_pozytywnych = 10;
     float procent_negatywnych = 10;
-    float wspolczynnik_wyparowywania = 0.2;
-    int liczba_iteracji = 5;
+    float wspolczynnik_wyparowywania = 0.1;
+    int liczba_iteracji = 10;
+    int nakladanie_feromonow_na_poprawne_multiplier = 20; // wartosc wyparowywania * ten wspolczynnik oznacza ilosc feromonow nalozonych na najlepsze dotychczasowe rozwiazanie
+    int liczba_mrowek = 2;
 
     bool dodano = false;
 
     vector<char> lancuch_DNA;
     int rand_index = rand() % +4;
 
-    if (czy_generowac == true) {
+    if (czy_generowac) {
 
         ofstream plik("wygenerowany_lancuch.txt");
 
@@ -183,9 +186,14 @@ int main() {
 
     bool droga_po_feromonach = false;
     int wierzcholek_po_feromonach;
-
+    int najmniejsza_odleglosc_w_DNA = 0;
+    vector<char> najlepszy_wynik_DNA;
+    bool czy_najlepszy = false;
+    int ktora_mrowka = 0;
+    
     while (iteracja < liczba_iteracji) {
 
+        czy_najlepszy = false;
         wynik_DNA.clear();
         realna_dlugosc_DNA = dlugosc_okienka;
         zuzyte_wierzcholki_id.clear();
@@ -197,8 +205,10 @@ int main() {
         zuzyte_wierzcholki_id.push_back(0);
         okienka = okienka_kopia;
 
-        struct Mrowka mrowka;
+        Mrowka mrowka;
         mrowka.sciezka.push_back(0);
+
+
 
         while (realna_dlugosc_DNA < dlugosc_DNA) {
 
@@ -288,6 +298,8 @@ int main() {
 
             Mrowka feromony_tej_mrowki;
 
+            // ruch po feromonach
+
             for (auto &n: mrowki) {
                 if (dist(g) < (n.feromony * 10)) {
 
@@ -303,9 +315,7 @@ int main() {
                         else {
                             droga_po_feromonach = true;
                             feromony_tej_mrowki = n;
-                            for (auto ite = okienka_temp.begin(); ite != okienka_temp.end(); ite++) {
-
-                            }
+                          //  feromony_tej_mrowki.feromony = feromony_tej_mrowki.feromony + wspolczynnik_wyparowywania;
                             cout << "FEROMONY ZADZIALALY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
                             break;
                         }
@@ -409,12 +419,32 @@ int main() {
             mrowka.sciezka.push_back(index2);
             mrowka.feromony = min_suma_odleglosci / suma_odleglosci;
             czy_mrowka_dotarla = true;
+            if (najmniejsza_odleglosc_w_DNA <= suma_odleglosci) {
+                czy_najlepszy = true;
+                najlepszy_wynik_DNA = wynik_DNA;
+            }
         }
-        for (auto &n: mrowki) {
-            n.feromony = n.feromony - wspolczynnik_wyparowywania;
+
+        if (czy_najlepszy) {
+            mrowka.feromony = mrowka.feromony + nakladanie_feromonow_na_poprawne_multiplier * wspolczynnik_wyparowywania;
         }
-        mrowki.push_back(mrowka);
-        iteracja++;
+
+        if (ktora_mrowka < liczba_mrowek) {
+            mrowisko.push_back(mrowka);
+            ktora_mrowka++;
+        }
+        else {
+            for (auto& n : mrowisko) {
+                mrowki.push_back(n);
+            }
+            mrowisko.clear();
+            for (auto &n: mrowki) {
+                n.feromony = n.feromony - wspolczynnik_wyparowywania;
+            }
+            ktora_mrowka = 0;
+            iteracja++;
+        }
+
         realna_dlugosc_DNA = dlugosc_okienka - 1;
         suma_odleglosci = dlugosc_okienka - 1;
 
@@ -429,23 +459,24 @@ int main() {
     cout << endl << endl << "Rozwiazanie: " << endl;
     for (int i = 0; i < dlugosc_DNA; i++)
     {
-        cout << wynik_DNA[i] << " ";
+        cout << najlepszy_wynik_DNA[i] << " ";
     }
 
     //porownanie oryginalnej sekwencji oraz jej odtworzenia na podstawie okienek
     cout << endl << endl;
     int liczba_poprawnych_zasad = 0;
     for (int i = 0; i < dlugosc_DNA; i++) {
-        if (lancuch_DNA[i] == wynik_DNA[i]) {
+        if (lancuch_DNA[i] == najlepszy_wynik_DNA[i]) {
             liczba_poprawnych_zasad++;
         }
     }
+
 
     float poprawne_zasady_float = float (liczba_poprawnych_zasad);
     float dlugosc_DNA_float = float (dlugosc_DNA);
     float poprawnosc_rozwiazania = (poprawne_zasady_float/dlugosc_DNA_float) * 100;
     int dlugosc_trasy = 0;
-//    cout << "Poprawnosc rozwiazania: " << poprawnosc_rozwiazania << endl;
+    cout << "Poprawnosc rozwiazania: " << poprawnosc_rozwiazania << endl;
     cout << "suma_odleglosci: " << suma_odleglosci << endl;
     //   cout << "suma nadlozonej drogi: " << suma_nadlozonej_drogi << endl;
     for (const auto& mrowka : mrowki) {
