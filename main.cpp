@@ -100,8 +100,6 @@ int main() {
         okienka_temp.clear();
     }
 
-
-
     //GENEROWANIE BLEDOW NEGATYWNYCH - USUWANIE NUKLEOTYDOW
     float liczba_bledow_negatywnych = round(liczba_okienek * (procent_negatywnych / 100));
     for (int i = 0; i < liczba_bledow_negatywnych; i++) {
@@ -216,8 +214,6 @@ int main() {
         Mrowka mrowka;
         mrowka.sciezka.push_back(0);
 
-
-
         while (realna_dlugosc_DNA < dlugosc_DNA) {
 
             droga_po_feromonach = false;
@@ -323,8 +319,6 @@ int main() {
                         else {
                             droga_po_feromonach = true;
                             feromony_tej_mrowki = n;
-                            //  feromony_tej_mrowki.feromony = feromony_tej_mrowki.feromony + wspolczynnik_wyparowywania;
-                            cout << "FEROMONY ZADZIALALY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
                             break;
                         }
 
@@ -439,7 +433,6 @@ int main() {
         if (mrowisko.empty()) {
             mrowka.czy_najlepsza = true;
             najmniejsza_odleglosc_w_iteracji = suma_odleglosci;
-            cout << "111" << endl;
         } else {
             if (najmniejsza_odleglosc_w_iteracji >= suma_odleglosci) {
                 najmniejsza_odleglosc_w_iteracji = suma_odleglosci;
@@ -447,10 +440,8 @@ int main() {
                     n.czy_najlepsza = false;
                 }
                 mrowka.czy_najlepsza = true;
-                cout << "333" << endl;
             } else {
                 mrowka.czy_najlepsza = false;
-                cout << "444" << endl;
             }
         }
 
@@ -471,6 +462,14 @@ int main() {
             }
             ktora_mrowka = 0;
             iteracja++;
+        }
+
+        for (auto it = mrowki.begin(); it != mrowki.end(); ) {
+            if (it->feromony <= 0) {
+                it = mrowki.erase(it);
+            } else {
+                ++it;
+            }
         }
 
         realna_dlugosc_DNA = dlugosc_okienka - 1;
