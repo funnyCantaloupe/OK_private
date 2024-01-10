@@ -36,10 +36,10 @@ int main() {
     float dlugosc_okienka = 6;
     float procent_pozytywnych = 10;
     float procent_negatywnych = 10;
-    float wspolczynnik_wyparowywania = 0.1;
+    float wspolczynnik_wyparowywania = 0.2;
     int liczba_iteracji = 3;
-    int nakladanie_feromonow_na_poprawne_multiplier = 20; // wartosc wyparowywania * ten wspolczynnik oznacza ilosc feromonow nalozonych na najlepsze dotychczasowe rozwiazanie
-    int liczba_mrowek = 2;
+    int nakladanie_feromonow_na_poprawne_multiplier = 5; // wartosc wyparowywania * ten wspolczynnik oznacza ilosc feromonow nalozonych na najlepsze dotychczasowe rozwiazanie
+    int liczba_mrowek = 3;
 
     bool dodano = false;
 
@@ -162,7 +162,7 @@ int main() {
 
     vector<int> waga_wierzcholkow;
     vector<int> uzyte_losowe;
-    float suma_odleglosci = 3; // bo 1 miedzy wszystkimi polaczeniami 1. okienka; wg tego liczymy trafnosc obranej drogi
+    float suma_odleglosci = dlugosc_okienka - 1; // bo 1 miedzy wszystkimi polaczeniami 1. okienka; wg tego liczymy trafnosc obranej drogi
     int temp_dlugosc;
 
     pomoc2 = liczba_okienek;
@@ -197,9 +197,10 @@ int main() {
     // rozpoczecie liczenia czasu
 
     auto start_time = chrono::high_resolution_clock::now();
-    
+
     while (iteracja < liczba_iteracji) {
 
+        najmniejsza_odleglosc_w_iteracji = 0;
         czy_najlepszy = false;
         wynik_DNA.clear();
         realna_dlugosc_DNA = dlugosc_okienka;
@@ -308,7 +309,7 @@ int main() {
             // ruch po feromonach
 
             for (auto &n: mrowki) {
-                if (dist(g) < (n.feromony * 10)) {
+                if (dist(g) < (n.feromony * 100)) {
 
                     auto it_mrowka = find(n.sciezka.begin(), n.sciezka.end(), id_obecnego_wierzcholka);
 
@@ -322,7 +323,7 @@ int main() {
                         else {
                             droga_po_feromonach = true;
                             feromony_tej_mrowki = n;
-                          //  feromony_tej_mrowki.feromony = feromony_tej_mrowki.feromony + wspolczynnik_wyparowywania;
+                            //  feromony_tej_mrowki.feromony = feromony_tej_mrowki.feromony + wspolczynnik_wyparowywania;
                             cout << "FEROMONY ZADZIALALY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
                             break;
                         }
@@ -423,20 +424,7 @@ int main() {
                 suma_odleglosci = dlugosc_okienka - 1;
                 break;
             }
-            if (ktora_mrowka == 0) {
-                mrowka.czy_najlepsza = true;
-            } else {
-                if (najmniejsza_odleglosc_w_iteracji == 0) {
-                    najmniejsza_odleglosc_w_iteracji = suma_odleglosci;
-                } else if (najmniejsza_odleglosc_w_iteracji >= suma_odleglosci) {
-                    for (auto &n : mrowisko) {
-                        n.czy_najlepsza = false;
-                    }
-                    mrowka.czy_najlepsza = true;
-                } else {
-                    mrowka.czy_najlepsza = false;
-                }
-            }
+
             mrowka.sciezka.push_back(index2);
             mrowka.feromony = min_suma_odleglosci / suma_odleglosci;
             czy_mrowka_dotarla = true;
@@ -445,6 +433,24 @@ int main() {
             } else if (najmniejsza_odleglosc_w_DNA >= suma_odleglosci) {
                 czy_najlepszy = true;
                 najlepszy_wynik_DNA = wynik_DNA;
+            }
+        }
+
+        if (mrowisko.empty()) {
+            mrowka.czy_najlepsza = true;
+            najmniejsza_odleglosc_w_iteracji = suma_odleglosci;
+            cout << "111" << endl;
+        } else {
+            if (najmniejsza_odleglosc_w_iteracji >= suma_odleglosci) {
+                najmniejsza_odleglosc_w_iteracji = suma_odleglosci;
+                for (auto &n : mrowisko) {
+                    n.czy_najlepsza = false;
+                }
+                mrowka.czy_najlepsza = true;
+                cout << "333" << endl;
+            } else {
+                mrowka.czy_najlepsza = false;
+                cout << "444" << endl;
             }
         }
 
@@ -503,8 +509,8 @@ int main() {
     float dlugosc_DNA_float = float (dlugosc_DNA);
     float poprawnosc_rozwiazania = (poprawne_zasady_float/dlugosc_DNA_float) * 100;
     int dlugosc_trasy = 0;
- //   cout << "Poprawnosc rozwiazania: " << poprawnosc_rozwiazania << endl;
- //   cout << "suma_odleglosci: " << suma_odleglosci << endl;
+    //   cout << "Poprawnosc rozwiazania: " << poprawnosc_rozwiazania << endl;
+    //   cout << "suma_odleglosci: " << suma_odleglosci << endl;
     //   cout << "suma nadlozonej drogi: " << suma_nadlozonej_drogi << endl;
     for (const auto& mrowka : mrowki) {
         std::cout << "Sciezka: ";
