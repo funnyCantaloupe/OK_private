@@ -37,9 +37,9 @@ int main() {
     float procent_pozytywnych = 10;
     float procent_negatywnych = 10;
     float wspolczynnik_wyparowywania = 0.2;
-    int liczba_iteracji = 3;
+    int liczba_iteracji = 1;
     int nakladanie_feromonow_na_poprawne_multiplier = 5; // wartosc wyparowywania * ten wspolczynnik oznacza ilosc feromonow nalozonych na najlepsze dotychczasowe rozwiazanie
-    int liczba_mrowek = 3;
+    int liczba_mrowek = 1;
 
     bool dodano = false;
 
@@ -418,14 +418,16 @@ int main() {
                 suma_odleglosci = dlugosc_okienka - 1;
                 break;
             }
-
+            cout << "wynik_DNA_size(): " << wynik_DNA.size() << endl;
             mrowka.sciezka.push_back(index2);
             mrowka.feromony = min_suma_odleglosci / suma_odleglosci;
             czy_mrowka_dotarla = true;
-            if (najmniejsza_odleglosc_w_DNA == 0) {
+            if (najmniejsza_odleglosc_w_DNA == 0 && wynik_DNA.size() >= dlugosc_DNA) {
                 najmniejsza_odleglosc_w_DNA = suma_odleglosci;
+                najlepszy_wynik_DNA = wynik_DNA;
             } else if (najmniejsza_odleglosc_w_DNA >= suma_odleglosci) {
                 czy_najlepszy = true;
+                cout << "najlepszy wynik = wynik_DNA, wynik_DNA: " << wynik_DNA.size() << endl;
                 najlepszy_wynik_DNA = wynik_DNA;
             }
         }
@@ -488,9 +490,9 @@ int main() {
 
     //wypisanie wyniku
     cout << endl << endl << "Rozwiazanie: " << endl;
-    for (int i = 0; i < dlugosc_DNA; i++)
+    for (int i = 0; i < najlepszy_wynik_DNA.size(); i++)
     {
-        cout << lancuch_DNA[i];
+        cout << najlepszy_wynik_DNA[i];
     }
 
     cout << endl;
